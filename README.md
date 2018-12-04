@@ -5,7 +5,7 @@ Prometheus Pusher srcape from the metrics available in Logstash since version 5.
 
 ```bash
 go get -u github.com/klnchu/logstash_pusher
-cd $GOPATH/src/github.com/BonnierNews/logstash_pusher
+cd /github.com/klnchu/logstash_pusher
 make
 ./logstash_pusher -exporter.bind_address :1234 -logstash.endpoint http://localhost:1235
 ```

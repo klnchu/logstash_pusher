@@ -133,7 +133,7 @@ func main() {
 
 	prometheus.MustRegister(logstashCollector)
 
-	if *intervelScrape >= 0 {
+	if *intervelScrape > 0 {
 		log.Infoln("Starting Scrape logstash")
 		go scrape.IntervalScrape(pushGatewayEndpoint, *intervelScrape)
 	}
