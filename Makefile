@@ -3,12 +3,12 @@ GOPATH          := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 PROMU           ?= $(GOPATH)/bin/promu
 GOLINTER        ?= $(GOPATH)/bin/gometalinter
 pkgs            = $(shell $(GO) list ./... | grep -v /vendor/)
-TARGET          ?= logstash_exporter
+TARGET          ?= logstash_pusher
 
 PREFIX          ?= $(shell pwd)
 BIN_DIR         ?= $(shell pwd)
 
-all: clean format vet gometalinter build test
+all: clean format vet  build test
 
 test:
 	@echo ">> running tests"

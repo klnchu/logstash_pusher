@@ -1,5 +1,5 @@
-# Logstash exporter
-Prometheus exporter for the metrics available in Logstash since version 5.0.
+# Logstash Pusher
+Prometheus Pusher srcape from the metrics available in Logstash since version 5.0,  and push prometheus PushGateway.
 
 ## Usage
 

@@ -1,19 +1,24 @@
 package main
 
 import (
-	"github.com/BonnierNews/logstash_exporter/collector"
+	"net/http"
+	_ "net/http/pprof"
+	"os"
+	"sync"
+	"time"
+
+	"github.com/klnchu/logstash_pusher/collector"
+	"github.com/klnchu/logstash_pusher/scrape"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/version"
 	"gopkg.in/alecthomas/kingpin.v2"
-	"net/http"
-	_ "net/http/pprof"
-	"sync"
-	"time"
 )
 
 var (
-	scrapeDurations = prometheus.NewSummaryVec(
+	pushGatewayEndpoint string
+	scrapeDurations     = prometheus.NewSummaryVec(
 		prometheus.SummaryOpts{
 			Namespace: collector.Namespace,
 			Subsystem: "exporter",
@@ -96,8 +101,17 @@ func execute(name string, c collector.Collector, ch chan<- prometheus.Metric) {
 	scrapeDurations.WithLabelValues(name, result).Observe(duration.Seconds())
 }
 
+func getOrDefalut(key, value string) string {
+	osValue := os.Getenv(key)
+	if len(osValue) >= 0 {
+		return osValue
+	}
+	return value
+}
+
 func init() {
-	prometheus.MustRegister(version.NewCollector("logstash_exporter"))
+	pushGatewayEndpoint = getOrDefalut("PUSH_GATEWAYE_EDNPOINT", "http://pushgateway.simple.org:9010")
+	prometheus.MustRegister(version.NewCollector("logstash_pusher"))
 }
 
 func main() {
@@ -107,7 +121,7 @@ func main() {
 	)
 
 	log.AddFlags(kingpin.CommandLine)
-	kingpin.Version(version.Print("logstash_exporter"))
+	kingpin.Version(version.Print("logstash_pusher"))
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 
@@ -117,6 +131,9 @@ func main() {
 	}
 
 	prometheus.MustRegister(logstashCollector)
+
+	log.Infoln("Starting Scrape logstash")
+	go scrape.IntervalScrape(pushGatewayEndpoint)
 
 	log.Infoln("Starting Logstash exporter", version.Info())
 	log.Infoln("Build context", version.BuildContext())
