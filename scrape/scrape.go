@@ -18,9 +18,10 @@ const (
 )
 
 // IntervalScrape interval scrape from http and push
-func IntervalScrape(endpoint string) {
+func IntervalScrape(endpoint string, intervel int) {
 
-	ticker := time.NewTicker(10 * time.Second)
+	duration := time.Duration(int64(intervel))
+	ticker := time.NewTicker(duration * time.Second)
 	defer ticker.Stop()
 	for {
 		select {

@@ -118,6 +118,7 @@ func main() {
 	var (
 		logstashEndpoint    = kingpin.Flag("logstash.endpoint", "The protocol, host and port on which logstash metrics API listens").Default("http://localhost:9600").String()
 		exporterBindAddress = kingpin.Flag("web.listen-address", "Address on which to expose metrics and web interface.").Default(":9198").String()
+		intervelScrape      = kingpin.Flag("intervel.scrape", "intervel scrape metrics").Default("10").Int()
 	)
 
 	log.AddFlags(kingpin.CommandLine)
@@ -132,8 +133,10 @@ func main() {
 
 	prometheus.MustRegister(logstashCollector)
 
-	log.Infoln("Starting Scrape logstash")
-	go scrape.IntervalScrape(pushGatewayEndpoint)
+	if *intervelScrape >= 0 {
+		log.Infoln("Starting Scrape logstash")
+		go scrape.IntervalScrape(pushGatewayEndpoint, *intervelScrape)
+	}
 
 	log.Infoln("Starting Logstash exporter", version.Info())
 	log.Infoln("Build context", version.BuildContext())
