@@ -135,7 +135,7 @@ func main() {
 
 	if *intervelScrape > 0 {
 		log.Infoln("Starting Scrape logstash")
-		go scrape.IntervalScrape(pushGatewayEndpoint, *intervelScrape)
+		go scrape.IntervalScrape(pushGatewayEndpoint, *intervelScrape, *exporterBindAddress)
 	}
 
 	log.Infoln("Starting Logstash exporter", version.Info())

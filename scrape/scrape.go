@@ -13,12 +13,13 @@ import (
 )
 
 const (
-	exporterEndpoint = "http://localhost:9198/metrics"
-	jobName          = "logstash"
+	jobName = "logstash"
 )
 
 // IntervalScrape interval scrape from http and push
-func IntervalScrape(endpoint string, intervel int) {
+// endpoint as push gateway endpoint, like http://pushgateway.simple.com
+// interval as interval scrape logstash metric
+func IntervalScrape(endpoint string, intervel int, metricPort string) {
 
 	duration := time.Duration(int64(intervel))
 	ticker := time.NewTicker(duration * time.Second)
@@ -26,14 +27,14 @@ func IntervalScrape(endpoint string, intervel int) {
 	for {
 		select {
 		case <-ticker.C:
-			scrapeAndPush(endpoint)
+			scrapeAndPush(endpoint, metricPort)
 		}
 	}
 }
 
-func scrapeAndPush(endpoint string) {
+func scrapeAndPush(endpoint string, metricPort string) {
 
-	body, err := scrape()
+	body, err := scrape(metricPort)
 	if err != nil {
 		log.Errorf("Cannot get metric from local server: %v", err)
 		return
@@ -44,9 +45,10 @@ func scrapeAndPush(endpoint string) {
 	}
 }
 
-func scrape() ([]byte, error) {
+func scrape(metricPort string) ([]byte, error) {
 
-	resp, err := http.Get(exporterEndpoint)
+	url := fmt.Sprintf("http://localhost%s/metrics", metricPort)
+	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
