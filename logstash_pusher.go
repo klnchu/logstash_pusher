@@ -103,7 +103,7 @@ func execute(name string, c collector.Collector, ch chan<- prometheus.Metric) {
 
 func getOrDefalut(key, value string) string {
 	osValue := os.Getenv(key)
-	if len(osValue) >= 0 {
+	if len(osValue) > 0 {
 		return osValue
 	}
 	return value
