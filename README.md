@@ -17,5 +17,10 @@ Flag | Description | Default
 -logstash.endpoint | Metrics endpoint address of logstash | http://localhost:9600
 -intervel.scrape | Intervel Scrape, when less 0, stop the processing | 10
 
+
+### Environment
+
+PUSH_GATEWAYE_EDNPOINT  = 'http://pushgateway.simple.com'
+
 ## Implemented metrics
 * Node metrics
