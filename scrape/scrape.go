@@ -7,14 +7,20 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/prometheus/common/log"
 )
 
-const (
-	jobName = "logstash"
-)
+var jobName = ""
+
+func init() {
+	jobName = os.Getenv("JOB_NAME")
+	if len(jobName) <= 0 {
+		jobName = "logstash"
+	}
+}
 
 // IntervalScrape interval scrape from http and push
 // endpoint as push gateway endpoint, like http://pushgateway.simple.com

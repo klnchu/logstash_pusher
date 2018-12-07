@@ -20,7 +20,8 @@ Flag | Description | Default
 
 ### Environment
 
-PUSH_GATEWAYE_EDNPOINT  = 'http://pushgateway.simple.com'
+PUSH_GATEWAYE_ENDPOINT  = 'http://pushgateway.simple.com'
+JOB_NAME = 'logstash' # options
 
 ## Implemented metrics
 * Node metrics

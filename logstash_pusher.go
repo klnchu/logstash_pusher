@@ -110,7 +110,7 @@ func getOrDefalut(key, value string) string {
 }
 
 func init() {
-	pushGatewayEndpoint = getOrDefalut("PUSH_GATEWAYE_EDNPOINT", "http://pushgateway.simple.org:9010")
+	pushGatewayEndpoint = getOrDefalut("PUSH_GATEWAYE_ENDPOINT", "http://pushgateway.simple.org:9010")
 	prometheus.MustRegister(version.NewCollector("logstash_pusher"))
 }
 
